@@ -1,0 +1,80 @@
+<!doctype html>
+<style>
+   .custom-file-input {
+   border-radius: 20px;
+   cursor: pointer;
+   }
+   .custom-file-label {
+   border-radius: 20px;
+   background-color: #f8f9fa;
+   padding: 8px 12px;
+   }
+</style>
+<script>
+   document.addEventListener("DOMContentLoaded", function() {
+       const fileInput = document.querySelector('.custom-file-input');
+       const fileLabel = document.querySelector('.custom-file-label');
+
+       fileInput.addEventListener('change', function() {
+           const fileName = fileInput.files[0] ? fileInput.files[0].name : "File browsed";
+           fileLabel.textContent = fileName;
+           fileLabel.style.backgroundColor = "limegreen";
+           fileLabel.style.color = "white";
+       });
+   });
+</script>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+      <title> Flask Application </title>
+   </head>
+   <body>
+      <div class="container-fluid">
+         <div class="row">
+            <div class="col-12 mx-auto mt-5 text-center">
+               <h1 class="mb-5">Upload an Image for LEGO Detection</h1>
+               <form method="post" enctype="multipart/form-data">
+                  {{ form.hidden_tag() }}
+                  {% for error in form.photo.errors %}
+                  <span style="color: red;">{{ error }}</span>
+                  {% endfor %}
+                  <div class="row justify-content-center mb-5">
+                     <div class="col-auto">
+                        <div class="custom-file">
+                           {{ form.photo(class="custom-file-input") }}
+                           {{ form.photo.label(text="Choose a file", class="custom-file-label") }}
+                        </div>
+                     </div>
+                     <div class="col-auto">
+                        {{ form.submit(class="btn btn-success") }}
+                     </div>
+                  </div>
+               </form>
+               <div class="row mt-6">
+                  {% if file_url_common %}
+                  <div class="col">
+                     <h3>Your photo</h3>
+                     <img src="{{ file_url_common }}" class="img-thumbnail" style="max-width: 49%;">
+                  </div>
+                  {% endif %}
+                  {% if file_url_detect %}
+                  <div class="col">
+                     <h3>Result</h3>
+                     <img src="{{ file_url_detect }}" class="img-thumbnail" style="max-width: 49%;">
+                  </div>
+                  {% endif %}
+               </div>
+            </div>
+         </div>
+      </div>
+      <script>
+         window.onload = function() {
+            var inputFile = document.querySelector('input[type="file"]');
+            inputFile.setAttribute('data-text', 'No file selected');
+            inputFile.setAttribute('data-btn-text', 'Choose File');
+         };
+      </script>
+   </body>
+</html>
